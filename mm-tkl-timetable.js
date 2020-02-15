@@ -1,30 +1,31 @@
 /* global Module */
 
 /* Magic Mirror
- * Module: mm-hsl-timetable
+ * Module: mm-tkl-timetable
  *
  * Add this to config.js:
 
 	{
-		module: "mm-hsl-timetable",
+		module: "mm-tkl-timetable",
 		position: "top_right",
 		header: "Bussiaikataulu",
 		config: {
-			stops: [1130113],
+			stops: [3660],
 			busCount: 5
 		}
 	}
 
  *
- * By Sami Mäkinen http://github.com/zakarfin
+ * By Juliusz Kotelba http://github.com/JurnetFIN
+ * Based on mm-hsl-timetable by Sami Mäkinen http://github.com/zakarfin
  * MIT Licensed.
  */
 
-Module.register("mm-hsl-timetable",{
+Module.register("mm-tkl-timetable",{
 
 	// Default module config.
 	defaults: {
-		stops: [1130113],
+		stops: [3660],
 		busCount: 5,
 
 		initialLoadDelay: 0, // 0 seconds delay
@@ -32,7 +33,7 @@ Module.register("mm-hsl-timetable",{
 		//updateInterval: 2 * 1000, // every 2 seconds
 		retryDelay: 2500,
 
-		apiURL: "https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql",
+		apiURL: "https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql",
 
 		timetableClass: "timetable"
 	},
@@ -115,10 +116,11 @@ Module.register("mm-hsl-timetable",{
 			return "<span>Couldn't get schedule</span>";
 		}
 		// tr class="normal"
-		var table = "<table><tr><th colspan=2>" + data.name + "</th></tr>";
+		var table = "<table><tr><th colspan=3>" + data.name + "</th></tr>";
 		var rows = data.busses.map(item => {
 			return "<tr><td>" + item.line +
-				"</td><td>" + item.until +
+				"</td><td style='padding-left:10px;'>" + item.headsign +
+				"</td><td style='padding-left:10px;'>" + item.until +
 				" (" + item.time + ")" +
 				"</td></tr>";
 		});

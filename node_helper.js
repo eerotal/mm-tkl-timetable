@@ -11,7 +11,7 @@ function getSchedule(baseUrl, stop, successCb, errorCB) {
 		headers: {
 			"Content-Type": "application/graphql"
 		},
-		body: getHSLPayload(stop.id || stop, moment().format("YYYYMMDD"))
+		body: getTKLPayload(stop.id || stop, moment().format("YYYYMMDD"))
 	};
 	request(options, (err, res, body) => {
 		if (err || body.indexOf('<') === 0) {
@@ -37,9 +37,9 @@ function getSchedule(baseUrl, stop, successCb, errorCB) {
 	});
 }
 
-function getHSLPayload(stop, date) {
+function getTKLPayload(stop, date) {
 	return `{
-      stop(id: "HSL:${stop}") {
+      stop(id: "tampere:${stop}") {
         name
         lat
         lon
@@ -53,6 +53,7 @@ function getHSLPayload(stop, date) {
           }
           stoptimes {
             serviceDay
+            headsign
             scheduledDeparture
             realtimeDeparture
             trip {
@@ -80,8 +81,10 @@ function processBusData(json, minutesFrom = 0) {
 				return;
 			}
 			const date = moment(datVal);
+			const headsign = stopTime.headsign;
 			const bus = {
 				line,
+				headsign,
 				info: stopTime.trip.alerts.join(),
 				time: date.format("H:mm"),
 				until: date.fromNow(),

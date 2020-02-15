@@ -1,12 +1,12 @@
-# Module for [MagicMirror](https://magicmirror.builders/): Timetable for HSL data (Finland)
+# Module for [MagicMirror](https://magicmirror.builders/): Timetable for Nysse data (Finland)
 
-The `mm-hsl-timetable` module fetches bus timetable data from HSL (Helsinki region, Finland) and shows the timetables for configured stops.
+The `mm-tkl-timetable` module fetches bus timetable data from Nysse (Tampere region, Finland) and shows the timetables for configured stops.
 
-You will need to check the "solmutunnus" from https://www.avoindata.fi/data/fi/dataset/hsl-n-joukkoliikenteen-pysakit and add the number of the bus stop you want to show in the config stops-array. Or query the gtfsId from https://digitransit.fi/en/developers/apis/1-routing-api/stops/#query-stops-by-name-or-number.
+You will need to check the "pysäkkitunnus" from https://lissu.tampere.fi/timetable/ and add the number of the bus stop you want to show in the config stops-array. Or query the gtfsId from https://digitransit.fi/en/developers/apis/1-routing-api/stops/#query-stops-by-name-or-number.
 
 ## Screenshot
 
-- HSL Timetable screenshot
+- TKL Timetable screenshot
 
 ![HSL Timetable screenshot](screenshot.png)
 
@@ -16,12 +16,12 @@ You will need to check the "solmutunnus" from https://www.avoindata.fi/data/fi/d
 2) Add to the modules array in the `MagicMirror/config/config.js` file:
 ````javascript
 modules: [{
-	module: "mm-hsl-timetable",
+	module: "mm-tkl-timetable",
 	position: "top_right",
-	header: "Bus schedule",
+	header: "Bussiaikataulu",
 	config: {
-		stops: [1130113],
-		busCount: 5
+		stops: [3360],
+		busCount: 3
 	}
 }]
 ````
