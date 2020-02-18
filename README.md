@@ -20,7 +20,7 @@ modules: [{
 	position: "top_right",
 	header: "Bussiaikataulu",
 	config: {
-		stops: [3360],
+		stops: ["3660", "0504"],
 		busCount: 3
 	}
 }]
