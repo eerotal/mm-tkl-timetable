@@ -8,7 +8,7 @@ You will need to check the "pysäkkitunnus" from https://lissu.tampere.fi/timeta
 
 - TKL Timetable screenshot
 
-![HSL Timetable screenshot](screenshot.png)
+![TKL Timetable screenshot](screenshot.png)
 
 ## Using the module
 
