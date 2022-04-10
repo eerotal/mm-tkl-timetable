@@ -109,6 +109,12 @@ Module.register("mm-tkl-timetable",{
 		large.innerHTML = htmlElements.join("");
 		wrapper.appendChild(large);
 
+		let year = new Date().getFullYear();
+		let copy = document.createElement("span");
+		copy.classList.add("copynotice", "dimmed", "light", "small");
+		copy.innerHTML = `&copy; ${year} TKL`;
+		wrapper.appendChild(copy);
+
 		return wrapper;
 	},
 	getTable: function (data) {
