@@ -1,40 +1,61 @@
 var fs = require("fs");
 var path = require("path");
 var moment = require("moment");
-const request = require("request");
 var NodeHelper = require("node_helper");
+var URL = require('url');
+var https = require('https');
 
 function getSchedule(baseUrl, stop, successCb, errorCB) {
+	const payload = getTKLPayload(stop.id || stop, moment().format("YYYYMMDD"));
 	const options = {
 		method: "POST",
-		url: baseUrl,
 		headers: {
-			"Content-Type": "application/graphql"
+			"Content-Type": "application/graphql",
+			"Content-Length": payload.length
 		},
-		body: getTKLPayload(stop.id || stop, moment().format("YYYYMMDD"))
 	};
-	request(options, (err, res, body) => {
-		if (err || body.indexOf('<') === 0) {
-			errorCB(err);
-			return;
-		}
-		try {
-			var json = JSON.parse(body);
-			const data = json.data.stop;
-			if (!data) {
+
+	let req = https.request(baseUrl, options, res => {
+		let body = "";
+
+		res.on("data", (chunk) => {
+			body += chunk;
+		});
+
+		res.on("end", () => {
+			if (body.indexOf('<') === 0) {
 				errorCB(err);
 				return;
 			}
-			var response = {
-				stop: stop.id || stop,
-				name: stop.name || data.name,
-				busses: processBusData(data.stoptimesForServiceDate, stop.minutesFrom)
-			};
-			successCb(response);
-		} catch (e) {
-			errorCB(e);
-		}
+
+			try {
+				let json = JSON.parse(body);
+				const data = json.data.stop;
+
+				if (!data) {
+					errorCB(new Error("Invalid data received from API."));
+					return;
+				}
+
+				let response = {
+					stop: stop.id || stop,
+					name: stop.name || data.name,
+					busses: processBusData(data.stoptimesForServiceDate, stop.minutesFrom)
+				};
+
+				successCb(response);
+			} catch (e) {
+				errorCB(e)
+			}
+		});
 	});
+
+	req.on("error", e => {
+		errorCB(e)
+	});
+
+	req.write(payload);
+	req.end();
 }
 
 function getTKLPayload(stop, date) {
