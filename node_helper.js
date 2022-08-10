@@ -23,9 +23,12 @@ function getSchedule(baseUrl, stop, successCb, errorCB) {
 		});
 
 		res.on("end", () => {
-			if (body.indexOf('<') === 0) {
-				errorCB(err);
-				return;
+			if (res.statusCode < 200 || res.statusCode > 299) {
+				errorCB(new Error(
+					"HTTP " + res.statusCode + " received from the TKL API. " +
+					"Body:\n" + body
+				));
+			    return;
 			}
 
 			try {
